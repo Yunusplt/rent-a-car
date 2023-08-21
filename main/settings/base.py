@@ -39,10 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #!MY APPS
+    'users',
+
     #!THIRD_PARTY_APPS
     'rest_framework',
     'drf_yasg',
     # "debug_toolbar",  sadece dev asamasinda gözükmesini istedigim icin bunu dev.py da cagiriyorum. in dev.py
+    'rest_framework.authtoken',
+    'dj_rest_auth',
 
 ]
 
@@ -136,3 +141,76 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     # ...
 # ]
 #!-----------------------------------
+
+#! 2108 LOGGING  consolda detayli bilgi verir asagidaki basliklar altinda [INFO] [WARNING] 
+#! debug.log dosyasi olusur. consoledaki hatalar orada kayit altina alinir. 
+#! Log file tutmasi icin
+#! Python defines the following log levels:
+#! DEBUG: Low level system information for debugging purposes
+#! INFO: General system information
+#! WARNING: Information describing a minor problem that has occurred.
+#! ERROR: Information describing a major problem that has occurred.
+#! CRITICAL: Information describing a critical problem that has occurred
+LOGGING = { 
+    "version": 1, 
+    # is set to True then all loggers from the default configuration will be disabled. 
+    "disable_existing_loggers": True, 
+    # Formatters describe the exact format of that text of a log record.  
+    "formatters": { 
+        "standard": { 
+            "format": "[%(levelname)s] %(asctime)s %(name)s: %(message)s" 
+        }, 
+        'verbose': { 
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}', 
+            'style': '{', 
+        }, 
+        'simple': { 
+            'format': '{levelname} {message}', 
+            'style': '{', 
+        }, 
+    }, 
+    # The handler is the engine that determines what happens to each message in a logger. 
+    # It describes a particular logging behavior, such as writing a message to the screen,  
+    # to a file, or to a network socket. 
+    "handlers": { 
+        "console": { 
+            "class": "logging.StreamHandler", 
+            "formatter": "standard", 
+            "level": "INFO",                #! Info yazmasina ragmen warninglerde geliyor. infolar Warning icerir cunku
+            "stream": "ext://sys.stdout", 
+            }, 
+        'file': { 
+            'class': 'logging.FileHandler', 
+            "formatter": "verbose", 
+            'filename': './debug.log',       #! bulundugun dizinde debug.log file olusturur ve hatalari gösterir.
+            'level': 'WARNING',              #! sadece WARNINGleri göstermesini istiyorum...
+        }, 
+    }, 
+    # A logger is the entry point into the logging system. 
+    "loggers": { 
+        "django": { 
+            "handlers": ["console", 'file'], 
+            # log level describes the severity of the messages that the logger will handle.  
+            "level": config("DJANGO_LOG_LEVEL", "INFO"),  #! .env de DJANGO_LOG_LEVEL varsa o calisir. yoksa INFO!!!!!
+            'propagate': True, 
+            # If False, this means that log messages written to django.request  
+            # will not be handled by the django logger. 
+        }, 
+    }, 
+}
+#!2108---------------------------------------------------------------
+
+
+#!2108 For TokenAuthentication 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        
+    ]
+}
+#!2108---------------------------------------------------------------
+
+#!2108 CustomTokenSerializersi tanimliyoruz.
+REST_AUTH = {
+    "TOKEN_SERIALIZER" : "users.serializers.CustomTokenSerializer",  #! tokenserializers olarak. users icinde serializers icinde CustomTokenSerializers kulan.
+}

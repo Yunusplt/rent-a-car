@@ -1,54 +1,70 @@
-## Template (PostgreSQL, Swagger, Redoc, Debugtoolbar)
-
-### Steps
-- python -m venv env
-- ./env/script/activate
-- pip install djangorestframework
-- python.exe -m pip install --upgrade pip
-- pip install python-decouple
-- create .env file
-- create .gitignore
-- pip freeze > requirements.txt
-
-### PostgreSQL
-- pip install psycopg2 (ERROR) (for postgresql)
-- error verdikten sonra.
--- env folder delete
--- python -m venv env
--- ./env/script/activate
--- pip install -r .\requirements.txt
--- again $ pip install psycopg2 (successfully)
-
-### Install Swagger and Redoc  (for API documantion)
-- https://drf-yasg.readthedocs.io/en/stable/readme.html?highlight=installation#installation
-- pip install -U drf-yasg   add installed app 'drf_yasg',
-- in urls.py add... mevcut urls.py icerigini sil burdan gelen codeblogunu yapistir. 
-- migrate and look at Browser swagger
-
-### Install Debug Toolbar
-- https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
-- pip install django-debug-toolbar
-- installed app  "debug_toolbar",
-- "debug_toolbar.middleware.DebugToolbarMiddleware",       !! add to the Top !!
-- INTERNAL_IPS = [          in base.py add to the bottom.
-    # ...
-    "127.0.0.1",
-    # ...
-]
+### Step-1
+- pull template(swagger from github)
 
 
-### 
-- delete settings.py and create settings folder.
-- create files dev.py and prod.py 
-- we want to see debugtoolbar only in devolopment process. therefore all codes about debugtoolbar are in dev.py
-- descripe your Postgresql information in prod.py 
 
-### PostgreSQL (pgAdmin 4)
-- go to App
-- create a database
-- write ENV_NAME=prod in .env file.
-- python manage.py makemigrations
-- python manage.py migrate
-- python manage.py createsuperuser
-- look at the pgadmin app (PostgreSQL)
-- 
+### LOGGING 
+- It shows Warnings, infos in console and in debug.log file. 
+- add LOGGING in base.py
+
+
+### Step
+- python manage.py startapp users       add in base.py installed apps
+
+
+### TOKEN AUTHENTICATION
+- https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication
+- 'rest_framework.authtoken',        in installed app.
+- REST_FRAMEWORK = {                 in base.py en alt
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        
+    ]
+}
+#### dj-rest-auth kullanacaz.
+- dj-rest-auth ile otomatik login logout tanimlanir...
+- yukardaki islemlerle birlikte login yapinca TOKEN üretilir.
+- https://github.com/iMerica/dj-rest-auth
+- pip install dj-rest-auth
+- 'dj_rest_auth',                 in installed app
+- create a urls.py file in users app. then define this urls in main.urls
+- path('auth/', include('dj_rest_auth.urls')),      add in user.urls.py
+- migrate and then runserver
+- db.sqlite da authtoken_token fieldi olustu. 
+
+### Step
+- create serializers.py file
+- define serializers.py in views.py
+- path('register/',RegisterView.as_view()),  add in users.urls.py
+- artik browserda /users/register/ apisi ile register islemi gerceklestirilebilir.
+
+### Register asamasinda Token olusturmak icin. suan sadece login asamasinda olusuyor.
+- view.py da. RegisterView altina create functionu cagiriyourz.
+- sonra gidiyor. signal.py file kuruyoruz.
+- signal.py den sonra apps.py e git
+- artik register islemi yapilinca Token olusur. 
+- Login isleminde sadece Key dönüyor. ben user bilgileri de dönsün istiyorum..
+- go to serializers.py  create  a  CustomTokenSerializer
+- define CustomTokenSerializer in base.py in REST_AUTH 
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

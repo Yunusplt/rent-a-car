@@ -30,8 +30,8 @@ urlpatterns = [
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     #! for debug toolbar
     path('__debug__/', include('debug_toolbar.urls')),
-    # #myUrls
-    # path('users/', include('users.urls')),
+    #myUrls
+    path('users/', include('users.urls')),
     # path('', include('flights.urls')),
 ]
 
