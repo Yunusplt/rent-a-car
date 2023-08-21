@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent          #! 1 parent daha ekledim dn i ana klasörde görmek icin 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent      #! 1 parent daha ekledim dn i ana klasörde görmek icin 
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +24,7 @@ from decouple import config
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+# DEBUG = True   #! in dev.py and in prod.py
 
 ALLOWED_HOSTS = ["*"]
 
@@ -41,10 +41,13 @@ INSTALLED_APPS = [
 
     #!THIRD_PARTY_APPS
     'rest_framework',
+    'drf_yasg',
+    # "debug_toolbar",  sadece dev asamasinda gözükmesini istedigim icin bunu dev.py da cagiriyorum. in dev.py
 
 ]
 
 MIDDLEWARE = [
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",    #! For Debugtoolbar  in dev.py
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,7 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
-
+#! in dev.py ###################################################
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -84,7 +87,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
+#! ------------------------------------------------------------
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,3 +129,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#! For Debugtoolbar ----------------- in dev.py
+# INTERNAL_IPS = [
+#     # ...
+#     "127.0.0.1",
+#     # ...
+# ]
+#!-----------------------------------
